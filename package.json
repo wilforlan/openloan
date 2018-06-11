@@ -12,6 +12,7 @@
     "hbs": "~4.0.1",
     "http-errors": "~1.6.2",
     "mongoose": "^5.1.4",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "express-session": "^1.15.6"
   }
 }
