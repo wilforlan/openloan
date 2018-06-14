@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema({
-
-    id:{
-        type: Number,
-        minlength: 1,
-        maxlength: 11
-    },
+const PaymentHistorySchema = mongoose.Schema({
 
     loan_id:{
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         minlength: 1,
         maxlength: 11,
         required: true
@@ -31,12 +25,11 @@ const Schema = mongoose.Schema({
     },
 
     loan_status:{
-        type: Array,
+        type: Enumeration,
         required: true 
-
     }
 
 })
 
 
-module.exports = mongoose.model('history', Schema);
+module.exports = mongoose.model('PaymentHistory', PaymentHistorySchema);
