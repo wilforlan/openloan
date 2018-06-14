@@ -21,15 +21,16 @@ const PaymentHistorySchema = mongoose.Schema({
 
     payment_date:{
         type: Date,
-        default: Date.now()
+        required: true
     },
 
     loan_status:{
-        type: Enumeration,
-        required: true 
+        type: String,
+        enum: ["active", "inactive", "completed"],
+        required: true  
     }
 
 })
 
 
-module.exports = mongoose.model('PaymentHistory', PaymentHistorySchema);
+module.exports = mongoose.model('PaymenthHistory', PaymentHistorySchema);
