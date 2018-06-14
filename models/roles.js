@@ -1,7 +1,7 @@
 const mongoose = require (mongoose);
 
 const RolesSchema = mongoose.schema({
-   users_role: {
+   title: {
   	type:String,
   	required: true,
  	minlength: 4,
@@ -12,6 +12,6 @@ const RolesSchema = mongoose.schema({
   	required: true
   }
 
-})
+});
 
 module.exports= mongoose.model('roles', RolesSchema);
