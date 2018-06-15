@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 let loanSchema = new mongoose.Schema({ 
     users_id: {
-        type: int,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         trim: true,
         minlength: 1,
