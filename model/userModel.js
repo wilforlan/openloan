@@ -3,13 +3,13 @@ let Schema = mongoose.Schema;
 
 //mongoose schema obj
 let userSchema = mongoose.Schema({
-    firstname:{ 
+    first_name:{ 
         type: String,
         require: true,
         minlength: 4, 
         maxlength: 200
     },
-    lastname: {
+    last_name: {
         type: String,
         require: true,
         minlength: 4, 
@@ -26,7 +26,7 @@ let userSchema = mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        required: 'Email address is required',
+        required: true,
        
     },
     password: {
@@ -42,11 +42,11 @@ let userSchema = mongoose.Schema({
         maxlength:15
     },
     state_id: {
-        type:Number,
+        type: ObjectId,
         maxlength:11
         },
     country_id: {
-        type:Number,
+        type: ObjectId,
         maxlength:11
         },
     status_id:{
@@ -62,7 +62,7 @@ let userSchema = mongoose.Schema({
       required: true
     },
     user_roles_id:{
-        type:String,
+        type:ObjectId,
         },
 });
 
