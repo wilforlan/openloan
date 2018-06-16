@@ -33,4 +33,4 @@ const PaymentHistorySchema = mongoose.Schema({
 })
 
 
-module.exports = mongoose.model('PaymenthHistory', PaymentHistorySchema);
+module.exports = mongoose.model('PaymentHistory', PaymentHistorySchema);
