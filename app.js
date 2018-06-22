@@ -6,6 +6,8 @@ var logger = require('morgan');
 var validator = require('express-validator');
 var mongoose = require('mongoose');
 
+require('dotenv').config()
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
