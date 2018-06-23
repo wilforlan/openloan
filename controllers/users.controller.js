@@ -11,14 +11,13 @@ function Register (req, res){
         bvn: req.body.bvn,
         password: bcrypt.hashSync(req.body.password)
     };
-
-    (new UsersModel(userCreationObject)).save((err, object) => {
-        if (err) {
-            res.json({'status': false, 'message': 'An Error Occured', payload: null})
-        } else {
-            res.json({'status': true, 'message': 'Success', payload: object});
-        }
-    });
+        (new UsersModel(userCreationObject)).save((err, object) => {
+            if (err) {
+                res.json({'status': false, 'message': 'An Error Occured', payload: null})
+            } else {
+                res.json({'status': true, 'message': 'Success', payload: object});
+            }
+        });
 }
 
 function Login (req, res){
