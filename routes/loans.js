@@ -13,6 +13,6 @@ router.get('/reject/:id', LoanController.RejectLoan);
 router.delete('/delete/:id', LoanController.DeleteLoan);
 router.put('/disburse/:id', LoanController.DisburseLoan);
 router.get('/repaid/:id', LoanController.LoanRepaid);
-router.post('/repay/:id', LoanController.LoanRepay);
+// router.post('/repay/:id', LoanController.LoanRepay);
 
 module.exports = router;

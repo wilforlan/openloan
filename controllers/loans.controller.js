@@ -108,7 +108,7 @@ function LoanRepaid(req, res){
     LoansModel.findById( req.params.id, (error, loan) => {
 
         if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        if (loan.amount !== loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Not Been Paid in Full', payload: null});
+        if (loan.isDisbursed !== loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Not Been Paid in Full', payload: null});
         loan.isRepaid = true
 
         loan.save((err, saved) => {
@@ -120,45 +120,45 @@ function LoanRepaid(req, res){
 }
 
 // Added "LoanRepay" function to update the field loanRepaidTillDate but this needs heavy refactoring
-function LoanRepay (req, res) {
-    LoansModel.findById( req.params.id, (error, loan) => {
+// function LoanRepay (req, res) {
+//     LoansModel.findById( req.params.id, (error, loan) => {
 
-        messages = {
-            payAccepted : "Your payment has been accepted, Thanks.",
-            payOver: "You over paid, Please repay with the correct sum, Thanks.",
-            payComplete: "Congratulation, You Are Through With Your Payment."
-        }
+//         messages = {
+//             payAccepted : "Your payment has been accepted, Thanks.",
+//             payOver: "You over paid, Please repay with the correct sum, Thanks.",
+//             payComplete: "Congratulation, You Are Through With Your Payment."
+//         }
 
-        msgToSend = "";
+//         msgToSend = "";
 
-        let total = loan.amount;
-        let amount = req.body.amount;
-        let accm = loan.totalRepaidTillDate + amount;
-        let cmplt = req.body.amount + loan.totalRepaidTillDate;
-        let balance = total - loan.totalRepaidTillDate;
-        let overPay = "";
+//         let total = loan.amount;
+//         let amount = req.body.amount;
+//         let accm = loan.totalRepaidTillDate + amount;
+//         let cmplt = req.body.amount + loan.totalRepaidTillDate;
+//         let balance = total - loan.totalRepaidTillDate;
+//         let overPay = "";
 
 
-        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        if (total === loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Been Paid in full', payload: loan});
+//         if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
+//         if (total === loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Been Paid in full', payload: loan});
 
-        if (amount< total && accm < total){
-            msgToSend = messages.payAccepted;
-        } else if (cmplt === total) {
-            msgToSend = messages.payComplete;
-        } else if (accm > total) {
-            msgToSend = messages.payOver;
-            return res.json({'status': false, 'message': msgToSend, 'balance': balance, payload: null})
-        }
+//         if (amount< total && accm < total){
+//             msgToSend = messages.payAccepted;
+//         } else if (cmplt === total) {
+//             msgToSend = messages.payComplete;
+//         } else if (accm > total) {
+//             msgToSend = messages.payOver;
+//             return res.json({'status': false, 'message': msgToSend, 'balance': balance, payload: null})
+//         }
 
-        loan.totalRepaidTillDate += amount;
+//         loan.totalRepaidTillDate += amount;
 
-        loan.save((err, saved) => {
-            res.json({'status': true, 'message': msgToSend, payload: loan});
-        })
+//         loan.save((err, saved) => {
+//             res.json({'status': true, 'message': msgToSend, payload: loan});
+//         })
         
-    });
-}
+//     });
+// }
 
 function DeleteLoan(req, res){
 
@@ -184,8 +184,11 @@ function DisburseLoan (req, res){
         // Added a 'guarantorApproved' check statement
         if(!loan.guarantorApproved) return res.json({'status': false, 'message': 'Loan Not Approved By Your Guarantor', payload: null});
         
+        if(loan.isDisbursed) return res.json({'status': false, 'message': 'Loan Has been disbursed', payload: null});
+      
+
         loan.isDisbursed = true;
-        loan.amountDisbursed = req.body.amount || loan.amount;
+        loan.amountDisbursed = req.body.amountDisbursed || loan.amount;
         loan.amountDisbursedReason = req.body.amountDisbursedReason;
         loan.disbursementDate = Date.now();
         
@@ -206,7 +209,7 @@ module.exports = {
     AcceptLoan,
     RejectLoan,
     LoanRepaid,
-    LoanRepay,
+    // LoanRepay,
     DeleteLoan,
     DisburseLoan
 }
