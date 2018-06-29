@@ -12,10 +12,12 @@ function Register (req, res){
         password: bcrypt.hashSync(req.body.password)
     };
         (new UsersModel(userCreationObject)).save((err, object) => {
+            console.log(err)
             if (err) {
-                res.json({'status': false, 'message': 'An Error Occured', payload: null})
+                // drop the error info 
+                res.status(422).json({'status': false, 'message': 'An Error Occured', payload: err})
             } else {
-                res.json({'status': true, 'message': 'Success', payload: object});
+                res.status(201).json({'status': true, 'message': 'Success', payload: object});
             }
         });
 }
