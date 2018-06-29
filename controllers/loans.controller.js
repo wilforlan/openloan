@@ -79,7 +79,7 @@ function AcceptLoan (req, res){
         loan.save((err, saved)=>{
 
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.json({'status': true, 'message': 'Loan Accepted', payload: loan});
+            res.json({'status': true, 'message': 'Loan Accepted', payload: saved});
         });
 
     });
