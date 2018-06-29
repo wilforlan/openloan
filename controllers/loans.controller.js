@@ -17,6 +17,7 @@ function RequestLoan (req, res){
     'message': 'A user cannot be his own guarantor', payload: null});
 
     (new LoansModel(loanObject)).save((err, object) => {
+        
         if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
         res.json({'status': true, 'message': 'Success', payload: object});
     });
@@ -27,7 +28,8 @@ function RequestLoan (req, res){
 
 function ViewLoan (req, res) {
 
-    LoansModel.findById( req.params.id,(error, loan) => {
+    LoansModel.findById(req.params.id,(error, loan) => {
+        
         if(error) return res.join({'status': false, 'message': 'An Error Occured', payload: null});
         res.json({'status': true, 'message': 'Success', payload: loan});
     });
