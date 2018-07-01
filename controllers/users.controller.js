@@ -48,11 +48,6 @@ function Login (req, res){
 
 }
 
-function UpdateProfile (req, res){
-    // Needs AUTH
-    res.send("Working")
-}
-
 module.exports = {
     Register: Register,
     Login: Login,
