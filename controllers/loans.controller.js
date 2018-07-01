@@ -119,17 +119,22 @@ function LoanRepaid(req, res){
     });
 }
 
+/* 
+    Action : Updated the `DeleteLoan`, checked to be sure that the requested loan is not `null`
+    Date : 30th June 2018
+*/
 function DeleteLoan(req, res){
-
     LoansModel.findById( req.params.id,(error, loan) => {
-
-        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
+        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null})
+        // check if the loan is not `null`
+        // if its null that means requested loan to delete not found
+        if(!loan) return res.json({'status':false,'message':'Loan not found','payload':loan})
         if(loan.isDisbursed) return res.json({'status': false, 'message': 'Loan Has been Disbursed', payload: null});
 
         LoansModel.deleteOne({_id:loan._id},(err)=>{
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.status(202).json({'status': true, 'message': 'Loan Deleted'})
-        });
+            res.status(200).json({'status': true, 'message': 'Loan Deleted'})
+        }); 
     });
 }
 
