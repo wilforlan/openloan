@@ -48,7 +48,7 @@ function Login (req, res){
 
 }
 /* 
-    Action : complete the `UpdateProfile` function, checked to be sure that the requested loan is not `null`
+    Action : complete the `UpdateProfile` function
     Date : 1st July 2018
 */
 function UpdateProfile (req, res){
