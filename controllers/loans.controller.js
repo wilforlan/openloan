@@ -119,58 +119,22 @@ function LoanRepaid(req, res){
     });
 }
 
-// Added "LoanRepay" function to update the field loanRepaidTillDate but this needs heavy refactoring
-// function LoanRepay (req, res) {
-//     LoansModel.findById( req.params.id, (error, loan) => {
-
-//         messages = {
-//             payAccepted : "Your payment has been accepted, Thanks.",
-//             payOver: "You over paid, Please repay with the correct sum, Thanks.",
-//             payComplete: "Congratulation, You Are Through With Your Payment."
-//         }
-
-//         msgToSend = "";
-
-//         let total = loan.amount;
-//         let amount = req.body.amount;
-//         let accm = loan.totalRepaidTillDate + amount;
-//         let cmplt = req.body.amount + loan.totalRepaidTillDate;
-//         let balance = total - loan.totalRepaidTillDate;
-//         let overPay = "";
-
-
-//         if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-//         if (total === loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Been Paid in full', payload: loan});
-
-//         if (amount< total && accm < total){
-//             msgToSend = messages.payAccepted;
-//         } else if (cmplt === total) {
-//             msgToSend = messages.payComplete;
-//         } else if (accm > total) {
-//             msgToSend = messages.payOver;
-//             return res.json({'status': false, 'message': msgToSend, 'balance': balance, payload: null})
-//         }
-
-//         loan.totalRepaidTillDate += amount;
-
-//         loan.save((err, saved) => {
-//             res.json({'status': true, 'message': msgToSend, payload: loan});
-//         })
-        
-//     });
-// }
-
+/* 
+    Action : Updated the `DeleteLoan`, checked to be sure that the requested loan is not `null`
+    Date : 30th June 2018
+*/
 function DeleteLoan(req, res){
-
     LoansModel.findById( req.params.id,(error, loan) => {
-
-        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
+        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null})
+        // check if the loan is not `null`
+        // if its null that means requested loan to delete not found
+        if(!loan) return res.json({'status':false,'message':'Loan not found','payload':loan})
         if(loan.isDisbursed) return res.json({'status': false, 'message': 'Loan Has been Disbursed', payload: null});
 
         LoansModel.deleteOne({_id:loan._id},(err)=>{
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.status(202).json({'status': true, 'message': 'Loan Deleted'})
-        });
+            res.status(200).json({'status': true, 'message': 'Loan Deleted'})
+        }); 
     });
 }
 
