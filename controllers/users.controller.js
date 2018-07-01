@@ -47,6 +47,30 @@ function Login (req, res){
         });
 
 }
+/* 
+    Action : complete the `UpdateProfile` function, checked to be sure that the requested loan is not `null`
+    Date : 1st July 2018
+*/
+function UpdateProfile (req, res){
+    const userId = req.params.id;
+
+    LoansModel.find({ "userId": userId}, function (err, docs) {
+        if(err) return res.status(400).json({'status':false,'message':'An Error occured','payload':null});
+        if(!docs.isRepaid) return res.json({'status':false,'message':"Sorry Profile can't be updated because you have a pending loan to pay off",'payload':null})
+        const userProfileUpdateObject = {
+            name: req.body.name,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            address: req.body.address,
+            bvn: req.body.bvn,
+            password: bcrypt.hashSync(req.body.password)
+        };
+        UsersModel.findByIdAndUpdate(userId,userProfileUpdateObject,{new:true},(error,user)=>{
+            if(error) return res.status(400).json({'status':false,'message':'An Error occured','payload':null});
+            res.status(200).json({'status':true,'message':'Users Profile Update Successful','payload':user})
+        })
+    });
+}
 
 module.exports = {
     Register: Register,
