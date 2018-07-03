@@ -28,7 +28,7 @@ function RequestLoan (req, res){
 function ViewLoan (req, res) {
 
     LoansModel.findById( req.params.id,(error, loan) => {
-        if(error) return res.join({'status': false, 'message': 'An Error Occured', payload: null});
+        if(error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
         res.json({'status': true, 'message': 'Success', payload: loan});
     });
 }
@@ -37,7 +37,7 @@ function ViewLoans (req, res){
 
     LoansModel.find((error, loan) => {
 
-        if(error) return res.join({'status': false, 'message': 'An Error Occured', payload: null});
+        if(error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
         res.json({'status': true, 'message': 'Success', payload: loan});
 
     });
