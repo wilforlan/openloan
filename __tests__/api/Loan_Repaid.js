@@ -18,5 +18,6 @@ it ('Get should return a status of 200 Ok', function () {
 // Test case for checking for double entry
 it ('Get should return a status of 403 Forbidden', function () {
     return frisby.get('http://localhost:3000/loans/repaid/5b3b9b5cab95240e4c890305')
-      .expectNot('status', 200);
+      .expectNot('status', 200)
+      .expect('status', 403)
   });
