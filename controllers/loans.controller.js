@@ -13,12 +13,12 @@ function RequestLoan (req, res){
     // check if guarantor id and user id is the same
     // both cant be the same, because a user cannot be his own guarantor
 
-    if (loanObject.userId === loanObject.guarantorId) return res.json({'status': false, 
+    if (loanObject.userId === loanObject.guarantorId) return res.status(403).json({'status': false, 
     'message': 'A user cannot be his own guarantor', payload: null});
 
     (new LoansModel(loanObject)).save((err, object) => {
-        if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        res.json({'status': true, 'message': 'Success', payload: object});
+        if (err) return res.status(422).json({'status': false, 'message': 'An Error Occured', payload: null});
+        res.status(201).json({'status': true, 'message': 'Success', payload: object});
     });
 
 }
@@ -107,10 +107,14 @@ function LoanRepaid(req, res){
 
     LoansModel.findById( req.params.id, (error, loan) => {
 
-        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        if (loan.isDisbursed !== loan.totalRepaidTillDate) return res.json({'status': false, 'message': 'Loan Has Not Been Paid in Full', payload: null});
-        loan.isRepaid = true
-
+        if (error) return res.status(422).json({'status': false, 'message': 'An Error Occured', payload: null});
+        if (loan.amountDisbursed !== loan.totalRepaidTillDate) return res.status(400).json({'status': false, 
+        'message': 'Loan Has Not Been Paid in Full', payload: null});
+        
+        // Check for double entry (2/7/18)
+        if(loan.isRepaid) return res.status(403).json({'status': false, 'message': 'Loan Has been repaid', payload: null});
+        
+        loan.isRepaid = true;
         loan.save((err, saved) => {
             if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
             res.json({'status': true, 'message': 'Loan Repaid', payload: saved});
