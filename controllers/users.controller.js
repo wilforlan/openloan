@@ -40,7 +40,7 @@ function Login (req, res){
                 expiresIn: 60 * 60 * 60
             });
 
-            var payload = {};
+            var payload = [{}];
             payload.token = token;
             payload.user_details = User;
             res.status(200).json({'status': true, 'message': 'Success', payload: payload})
