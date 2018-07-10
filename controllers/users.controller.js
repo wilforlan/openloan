@@ -43,7 +43,7 @@ function Login (req, res){
             var payload = {};
             payload.token = token;
             payload.user_details = User;
-            res.json({'status': true, 'message': 'Success', payload: payload})
+            res.json([{'status': true, 'message': 'Success', payload: payload}])
         });
 
 }
