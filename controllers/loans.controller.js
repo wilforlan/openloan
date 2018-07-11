@@ -13,12 +13,12 @@ function RequestLoan (req, res){
     // check if guarantor id and user id is the same
     // both cant be the same, because a user cannot be his own guarantor
 
-    if (loanObject.userId === loanObject.guarantorId) return res.json({'status': false, 
+    if (loanObject.userId === loanObject.guarantorId) return res.status(403).json({'status': false, 
     'message': 'A user cannot be his own guarantor', payload: null});
 
     (new LoansModel(loanObject)).save((err, object) => {
-        if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        res.json({'status': true, 'message': 'Success', payload: object});
+        if (err) return res.status(400).json({'status': false, 'message': 'An Error Occured', payload: null});
+        res.status(201).json({'status': true, 'message': 'Success', payload: object});
     });
 
 }
@@ -51,9 +51,9 @@ function GuarantorApprove (req, res){
 
     LoansModel.findByIdAndUpdate( req.params.id,{guarantorApproved:true}, (error, loan) => {
         
-        if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});        
+        if (error) return res.status(404).json({'status': false, 'message': 'An Error Occured', payload: null});        
         loan.guarantorApproved = true;
-        res.json({'status': true, 'message': 'Guarantor Approved', payload: loan});
+        res.status(200).json({'status': true, 'message': 'Guarantor Approved', payload: loan});
         
     });
 
@@ -69,7 +69,7 @@ function AcceptLoan (req, res){
         if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
 
         // Added a 'guarantorApproved' check statement
-        if(!loan.guarantorApproved) return res.json({'status': false, 'message': 'Loan Not Approved By Your Guarantor', payload: null});
+        if(!loan.guarantorApproved) return res.status(403).json({'status': false, 'message': 'Loan Not Approved By Your Guarantor', payload: null});
         
         loan.isApproved = true;
 
@@ -77,7 +77,7 @@ function AcceptLoan (req, res){
         loan.save((err, saved)=>{
 
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.json({'status': true, 'message': 'Loan Accepted', payload: loan});
+            res.status(200).json({'status': true, 'message': 'Loan Accepted', payload: loan});
         });
 
     });
@@ -89,13 +89,11 @@ function RejectLoan(req, res){
     LoansModel.findById( req.params.id,(error, loan) => {
         
         if (error) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-        if(loan.isDisbursed) return res.json({'status': false, 'message': 'Loan Has been Disbursed', payload: null});
-        
+        if(loan.isDisbursed) return res.status(403).json({'status': false, 'message': 'Loan Has been Disbursed', payload: null});
         loan.isApproved = false;
-        loan.save((err, saved)=>{
-
+        loan.save((err, saved)=> {
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.json({'status': true, 'message': 'Loan Rejected', payload: loan});
+            res.status(200).json({'status': true, 'message': 'Loan Rejected', payload: loan});
         });
 
     });
@@ -146,9 +144,9 @@ function DisburseLoan (req, res){
         if(!loan.isApproved) return res.json({'status': false, 'message': 'Loan Not Approved', payload: null});
 
         // Added a 'guarantorApproved' check statement
-        if(!loan.guarantorApproved) return res.json({'status': false, 'message': 'Loan Not Approved By Your Guarantor', payload: null});
+        if(!loan.guarantorApproved) return res.status(403).json({'status': false, 'message': 'Loan Not Approved By Your Guarantor', payload: null});
         
-        if(loan.isDisbursed) return res.json({'status': false, 'message': 'Loan Has been disbursed', payload: null});
+        if(loan.isDisbursed) return res.status(403).json({'status': false, 'message': 'Loan Has been disbursed', payload: null});
       
 
         loan.isDisbursed = true;
@@ -159,7 +157,7 @@ function DisburseLoan (req, res){
         // changed 'res' in line  67 to 'saved' because it was messing with the main 'res' on line 55
         loan.save((err, saved)=>{
             if (err) return res.json({'status': false, 'message': 'An Error Occured', payload: null});
-            res.json({'status': true, 'message': 'Loan Disbursed', payload: loan});
+            res.status(200).json({'status': true, 'message': 'Loan Disbursed', payload: loan});
         });
     });
 }

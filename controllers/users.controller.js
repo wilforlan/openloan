@@ -1,4 +1,5 @@
 const UsersModel = require('../models/User');
+const LoansModel = require('../models/Loan');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 
@@ -44,7 +45,7 @@ function Login (req, res){
             payload.token = token;
             payload.user_details = User;
             //
-            res.json([{'status': true, 'message': 'Success', payload: payload}])
+            res.json({'status': true, 'message': 'Success', payload: payload})
         });
 
 }
