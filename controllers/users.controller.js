@@ -1,4 +1,5 @@
 const UsersModel = require('../models/User');
+const LoansModel = require('../models/Loan');
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 
@@ -43,14 +44,34 @@ function Login (req, res){
             var payload = {};
             payload.token = token;
             payload.user_details = User;
+            //
             res.json({'status': true, 'message': 'Success', payload: payload})
         });
 
 }
-
+/* 
+    Action : complete the `UpdateProfile` function
+    Date : 1st July 2018
+*/
 function UpdateProfile (req, res){
-    // Needs AUTH
-    res.send("Working")
+    const userId = req.params.id;
+
+    LoansModel.find({ "userId": userId}, function (err, docs) {
+        if(err) return res.status(400).json({'status':false,'message':'An Error occured','payload':null});
+        if(!docs.isRepaid) return res.json({'status':false,'message':"Sorry Profile can't be updated because you have a pending loan to pay off",'payload':null})
+        const userProfileUpdateObject = {
+            name: req.body.name,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber,
+            address: req.body.address,
+            bvn: req.body.bvn,
+            password: bcrypt.hashSync(req.body.password)
+        };
+        UsersModel.findByIdAndUpdate(userId,userProfileUpdateObject,{new:true},(error,user)=>{
+            if(error) return res.status(400).json({'status':false,'message':'An Error occured','payload':null});
+            res.status(200).json({'status':true,'message':'Users Profile Update Successful','payload':user})
+        })
+    });
 }
 
 module.exports = {
