@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "test": "jest"
+    "start": "node ./bin/www",
+    "test": "jest",
+    "dev": "nodemon ./bin/www"
   },
   "dependencies": {
     "bcrypt": "^2.0.1",
